@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from canvas_chat_2.api import db as api_db
+from canvas_chat_2.api import routes_graph as routes_graph_module
 from canvas_chat_2.api.main import create_app
 
 
@@ -176,3 +177,26 @@ def test_provider_management(client: TestClient) -> None:
     local_provider = next(p for p in providers_2 if p["id"] == "local-ollama")
     assert default_provider["is_active"] is False
     assert local_provider["is_active"] is True
+
+
+def test_canned_autoreply_can_be_disabled(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Verify canned auto-replies are skipped when feature flag is disabled."""
+
+    # @spec CCHAT-AUTOREPLY-004
+    monkeypatch.setattr(routes_graph_module.settings, "enable_canned_autoreply", False)
+
+    node_resp = client.post(
+        "/conversations/default/nodes",
+        json={"role": "human", "content": "Hello with flag off", "x": 10.0, "y": 20.0},
+    )
+    assert node_resp.status_code == 201
+    created_node = node_resp.json()
+
+    graph_resp = client.get("/conversations/default/graph")
+    assert graph_resp.status_code == 200
+    payload = graph_resp.json()
+    assert len(payload["nodes"]) == 1
+    assert payload["nodes"][0]["id"] == created_node["id"]
+    assert len(payload["edges"]) == 0

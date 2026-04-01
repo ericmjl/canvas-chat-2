@@ -10,6 +10,7 @@ Canvas Chat aims to support non-linear AI conversations where each message is a 
 - Persist conversation graph data (nodes + edges) so sessions survive restarts.
 - Support provider-based LLM routing via LiteLLM for future real inference.
 - Allow safe demos without live secrets by supporting canned auto-replies.
+- Ensure role semantics are visually obvious with high-contrast node styling.
 
 ## Target Users
 
@@ -30,6 +31,7 @@ Canvas Chat aims to support non-linear AI conversations where each message is a 
 - **SQLite over external DB**: faster setup and demos, limited concurrency.
 - **Node-level role model (`human|ai|system`)**: explicit semantics, simple rendering.
 - **Canned auto-reply support**: enables demos without API keys, not representative of model quality.
+- **Role-based node color encoding**: improves scanability and demo readability, requires basic accessibility tuning over time.
 
 ## Non-Goals
 

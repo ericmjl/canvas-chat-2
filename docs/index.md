@@ -35,3 +35,4 @@ What benefits does this project give to users?
 - [Canvas Composer and Auto-Reply LLD](designs/canvas-chat-core/LLD.md)
 - [Composer Input EARS](designs/canvas-chat-core/composer-input-EARS.md)
 - [Canned Auto-Reply EARS](designs/canvas-chat-core/canned-autoreply-EARS.md)
+- [Node Visual Contrast EARS](designs/canvas-chat-core/node-visual-contrast-EARS.md)

@@ -62,11 +62,47 @@
 		return `${role}: ${preview}`;
 	}
 
+	/** Inline node chrome: strong fills, light text, 2px borders for WCAG-friendly contrast on dark canvas. */
+	function nodeRoleVisualStyle(role: MessageRole): string {
+		switch (role) {
+			case 'human':
+				return [
+					'background-color:#0c4a6e',
+					'color:#e0f2fe',
+					'border:2px solid #38bdf8',
+					'border-radius:6px'
+				].join(';');
+			case 'ai':
+				return [
+					'background-color:#3730a3',
+					'color:#eef2ff',
+					'border:2px solid #a5b4fc',
+					'border-radius:6px'
+				].join(';');
+			case 'system':
+				return [
+					'background-color:#713f12',
+					'color:#fffbeb',
+					'border:2px solid #fbbf24',
+					'border-radius:6px'
+				].join(';');
+			default:
+				// @spec CCHAT-VISUAL-004
+				return [
+					'background-color:#374151',
+					'color:#f9fafb',
+					'border:2px solid #9ca3af',
+					'border-radius:6px'
+				].join(';');
+		}
+	}
+
 	function toFlowNode(n: MessageNode): ChatNode {
 		return {
 			id: n.id,
 			type: 'default',
 			position: { x: n.x, y: n.y },
+			style: nodeRoleVisualStyle(n.role),
 			data: {
 				label: nodeLabel(n.role, n.content),
 				role: n.role,
@@ -282,6 +318,7 @@
 	<div class="canvas-wrap" bind:clientWidth={flowW} bind:clientHeight={flowH}>
 		<SvelteFlowProvider>
 			<SvelteFlow
+				colorMode="dark"
 				bind:nodes
 				bind:edges
 				fitView
@@ -466,10 +503,23 @@
 		height: 100%;
 	}
 
+	/* Stronger selection ring than default xyflow box-shadow (keeps role borders visible). */
+	.canvas-wrap :global(.svelte-flow__node.svelte-flow__node-default.selectable.selected) {
+		outline: 3px solid #79c0ff;
+		outline-offset: 2px;
+		box-shadow:
+			0 0 0 1px rgba(13, 17, 23, 0.95),
+			0 0 0 5px rgba(121, 192, 255, 0.45);
+	}
+
+	.canvas-wrap :global(.svelte-flow__background-pattern.dots) {
+		--xy-background-pattern-color: #5c6570;
+	}
+
 	.panel {
 		width: 320px;
 		flex-shrink: 0;
-		border-left: 1px solid #30363d;
+		border-left: 1px solid #3d444d;
 		padding: 1rem;
 		overflow: auto;
 		background: #161b22;
@@ -482,7 +532,7 @@
 	}
 
 	.muted {
-		color: #8b949e;
+		color: #aeb8c3;
 		font-size: 0.85rem;
 		margin: 0;
 	}
@@ -504,21 +554,21 @@
 	.section {
 		margin-top: 1.25rem;
 		padding-top: 1rem;
-		border-top: 1px solid #21262d;
+		border-top: 1px solid #30363d;
 	}
 
 	.section h2 {
 		margin: 0 0 0.75rem;
 		font-size: 0.95rem;
 		font-weight: 600;
-		color: #c9d1d9;
+		color: #e6edf3;
 	}
 
 	.subhead {
 		margin: 1rem 0 0.5rem;
 		font-size: 0.85rem;
 		font-weight: 600;
-		color: #c9d1d9;
+		color: #e6edf3;
 	}
 
 	.checkbox-field .checkbox-row {
@@ -539,9 +589,9 @@
 
 	button {
 		cursor: pointer;
-		border: 1px solid #30363d;
+		border: 1px solid #3d444d;
 		background: #21262d;
-		color: #e6edf3;
+		color: #f0f6fc;
 		border-radius: 6px;
 		padding: 0.45rem 0.75rem;
 		font-size: 0.875rem;
@@ -565,16 +615,16 @@
 
 	.field span {
 		font-size: 0.8rem;
-		color: #8b949e;
+		color: #aeb8c3;
 	}
 
 	select,
 	textarea,
 	input[type='text'] {
 		font: inherit;
-		color: #e6edf3;
+		color: #f0f6fc;
 		background: #0d1117;
-		border: 1px solid #30363d;
+		border: 1px solid #3d444d;
 		border-radius: 6px;
 		padding: 0.45rem 0.5rem;
 	}
