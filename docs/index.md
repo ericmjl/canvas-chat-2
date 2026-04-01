@@ -28,3 +28,10 @@ mkdocs serve
 Place your reasons here for why this project exists.
 
 What benefits does this project give to users?
+
+## Design Documents
+
+- [High-Level Design](high-level-design.md)
+- [Canvas Composer and Auto-Reply LLD](designs/canvas-chat-core/LLD.md)
+- [Composer Input EARS](designs/canvas-chat-core/composer-input-EARS.md)
+- [Canned Auto-Reply EARS](designs/canvas-chat-core/canned-autoreply-EARS.md)

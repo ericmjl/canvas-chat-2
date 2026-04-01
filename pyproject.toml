@@ -67,7 +67,7 @@ testpaths = [
 [tool.pydoclint]
 style = 'sphinx'
 exclude = '\.git|\.tox|tests/data'
-require-return-section-when-returning-none = false
+require-return-section-when-returning-nothing = false
 arg-type-hints-in-docstring = false
 check-return-types = false
 
@@ -77,22 +77,30 @@ version = "0.0.1"
 # NOTE: move dependencies into this section if you need to distribute the project as a Python package.
 requires-python = ">=3.10"
 dependencies = [
+    "aiosqlite",
+    "fastapi",
     "matplotlib",
+    "litellm",
+    "loguru",
     "pandas",
+    "pydantic-settings",
     "scikit-learn",
     "numpy",
     "pyprojroot",
     "scipy",
     "pymc",
+    "sqlalchemy",
     "seaborn",
     "python-dotenv",
     "typer",
+    "uvicorn",
     "jax",
 ]
 readme = "README.md"
 
 [project.scripts]
 canvas-chat-2 = "canvas_chat_2.cli:app"
+canvas-chat-2-api = "canvas_chat_2.api.main:run"
 
 
 [tool.coverage.run]
@@ -146,6 +154,7 @@ test = "pytest"
 [tool.pixi.feature.devtools.tasks]
 lint = "pre-commit run --all-files"
 commit = "git commit"
+dev-canvas = "bash -lc 'python -m uvicorn canvas_chat_2.api.main:app --reload --host 127.0.0.1 --port 8000 & backend_pid=$!; trap \"kill $backend_pid\" EXIT INT TERM; cd frontend && npm run dev'"
 
 [tool.pixi.feature.docs.tasks]
 build-docs = "mkdocs build"
